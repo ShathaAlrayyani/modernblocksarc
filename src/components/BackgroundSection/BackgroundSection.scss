@@ -1,23 +1,83 @@
-/* BackgroundSection.module.scss */
+/* Prevent page scroll & make the slider own the viewport */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
 .mainSection {
   position: relative;
-  height: 100vh;
   width: 100%;
-  overflow: hidden; /* no scrollbars while pinned */
+  height: 100dvh; /* full device viewport height */
+  overflow: hidden;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  background: #000;
 }
 
 .sectionWrapper {
-  height: 100%;
+  background: #000;
+  display: grid;
+  place-items: center;
   width: 100%;
-  position: relative;
+  height: 100%;
+
+  isolation: isolate; /* keep overlay/text above the image */
 }
 
 .bgImg {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: -1;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  z-index: 0;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45));
+  z-index: 1;
+}
+
+.textContainer {
+  position: relative;
+  z-index: 2;
+  max-width: min(80ch, 90vw);
+  text-align: center;
+  color: #fff;
+  will-change: transform, opacity;
+}
+
+.headerWrapper {
+  margin-bottom: 0.75rem;
+}
+
+.header {
+  font-size: clamp(28px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.text {
+  font-size: clamp(14px, 2.2vw, 18px);
+  opacity: 0.9;
+}
+
+/* Optional: pointer hints that it's full-screen slides */
+.mainSection {
+  cursor: ns-resize;
+}
+
+/* Accessibility helpers */
+.sectionWrapper[data-active="true"] {
+  pointer-events: auto;
+}
+.sectionWrapper[aria-hidden="true"] {
+  pointer-events: none;
 }
